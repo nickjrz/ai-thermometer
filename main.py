@@ -142,7 +142,7 @@ def mainloop():
         boxes_ir = transform_boxes(boxes, 1.1, 1.1, 0, 0)
 
         if CALIBRATE:
-            temp_arr, drift = calibration(temp_arr) 
+            temp_arr, drift = calibration(temp_arr)                 
 
         temps = get_bb_temps(temp_arr, boxes_ir)
 
@@ -154,7 +154,6 @@ def mainloop():
             len(scores) * [None],  # don't feed landmarks
             # TODO: revisit this when we have improved homography-based transform
             temps,
-            CALIBRATE,
             CALIB_BOX,
             IR_WIN_SIZE,
             CMAP_TEMP_MIN,
@@ -223,6 +222,9 @@ if __name__ == "__main__":
 
     ir_thread = IRThread()
     ir_thread.start()
+
+    if not CALIBRATE:
+        CALIB_BOX = None
 
     if SAVE_FRAMES:
         executor = ThreadPoolExecutor(max_workers=4)
